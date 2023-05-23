@@ -1,7 +1,8 @@
 import { Handle, NodeProps, Position } from 'react-flow-renderer';
-import useStore, { ColorNode } from '../../store/store';
+import useStore from '../../store/store';
+import { ColorSetter } from '../../store/nodeTypes';
 
-export default function ColorChooserNode({ id, data }: NodeProps<ColorNode>) {
+export default function ColorChooserNode({ id, data }: NodeProps<ColorSetter>) {
   const updateNodeColor = useStore((state) => state.updateNodeColor);
   const edg = useStore(state => state.edges)
 
@@ -13,11 +14,9 @@ export default function ColorChooserNode({ id, data }: NodeProps<ColorNode>) {
     })
   };
 
-
-
   return (
     <div style={{ backgroundColor: data.color, borderRadius: 10 }}>
-      <Handle type="target" position={Position.Top} />
+   
       <div style={{ padding: 20 }}>
         <input
           type="color"
