@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 import {
   Connection,
   Edge,
@@ -12,8 +13,20 @@ import {
   EdgeChange,
 } from "react-flow-renderer";
 
-import initialNodes, {updateNodeText,updateNodeColor, handleConnect} from "./nodes";
+import {
+  updateNodeText,
+  updateNodeColor,
+  handleConnect,
+  addNode,
+  setNum,
+  setOperationType,
+  performMathOperation
+} from "./nodeServices";
+
+import initialNodes from "./nodes"
 import initialEdges from "./edges";
+import { NodeType } from "./nodeTypes";
+
 
 type RFState = {
   nodes: Node[];
@@ -23,6 +36,10 @@ type RFState = {
   onEdgesChange: OnEdgesChange;
   updateNodeColor: (nodeId: string, color: string) => void;
   updateNodeText: (nodeId: string, text: string) => void;
+  addNode: (type: NodeType) => void;
+  mathOperation: (nodeId: string) => void;
+  setMathOperationType: (type: string, id: string) => void;
+  setNum: (nodeId: string, num: number) => void;
 };
 
 const useStore = create<RFState>((set, get) => ({
@@ -41,8 +58,8 @@ const useStore = create<RFState>((set, get) => ({
     });
   },
   onConnect: (connection: Connection) => {
-    const edges = handleConnect(connection, get());
-    set({ edges });
+
+    set({ edges: handleConnect(connection, get()) });
   },
 
   updateNodeColor: (nodeId: string, color: string) => {
@@ -50,12 +67,35 @@ const useStore = create<RFState>((set, get) => ({
       nodes: updateNodeColor(get().nodes, nodeId, color)
     });
   },
+
   updateNodeText: (nodeId: string, text: string) => {
     set({
       nodes: updateNodeText(get().nodes, nodeId, text),
     });
-  }
-}))
+  },
 
+  addNode: (type: NodeType) => {
+    set((state) => ({
+      nodes: [...state.nodes, addNode(get().nodes, type)],
+    }));
+  },
+
+  mathOperation: (nodeId: string) => {
+    set({
+      nodes: performMathOperation(get().nodes, nodeId)
+    });
+  },
+
+  setMathOperationType: (type: string, id: string) => {
+    set({
+      nodes: setOperationType(get().nodes, id, type)
+    })
+  },
+
+  setNum: (nodeId: string, num: number) => {
+    set({ nodes: setNum(get().nodes, nodeId, num) })
+  },
+
+}))
 
 export default useStore;

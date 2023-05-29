@@ -15,8 +15,7 @@ export default function ColorChooserNode({ id, data }: NodeProps<ColorSetter>) {
   };
 
   return (
-    <div style={{ backgroundColor: data.color, borderRadius: 10 }}>
-   
+    <div style={{ backgroundColor: '#4287f5', borderRadius: 10 }}>
       <div style={{ padding: 20 }}>
         <input
           type="color"

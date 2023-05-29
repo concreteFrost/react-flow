@@ -1,11 +1,11 @@
-import AddNode from "./components/AddNode/AddNode";
+import LeftPanel from "./components/LeftPanel/LeftPanel";
 import Flow from "../src/components/Flow.tsx";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <AddNode></AddNode>
+      <LeftPanel></LeftPanel>
       <Flow></Flow>
     </div>
   );
