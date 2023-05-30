@@ -12,21 +12,21 @@ import {
   applyEdgeChanges,
   EdgeChange,
 } from "react-flow-renderer";
-
 import {
   updateNodeText,
   updateNodeColor,
-  handleConnect,
   addNode,
   setNum,
   setOperationType,
-  performMathOperation
+  performMathOperation,
+  getUsers,
 } from "./nodeServices";
 
-import initialNodes from "./nodes"
+import { handleConnect } from "./edgesServices";
+import initialNodes from "./nodes";
 import initialEdges from "./edges";
 import { NodeType } from "./nodeTypes";
-
+import fetchUsers from "../api/fetchUsers";
 
 type RFState = {
   nodes: Node[];
@@ -34,12 +34,16 @@ type RFState = {
   onNodesChange: OnNodesChange;
   onConnect: OnConnect;
   onEdgesChange: OnEdgesChange;
+  onFlowSave: () => void;
+  onFlowLoad: () => void;
+  clearFlow: () => void;
   updateNodeColor: (nodeId: string, color: string) => void;
   updateNodeText: (nodeId: string, text: string) => void;
   addNode: (type: NodeType) => void;
   mathOperation: (nodeId: string) => void;
   setMathOperationType: (type: string, id: string) => void;
   setNum: (nodeId: string, num: number) => void;
+  getUsers: (nodeId: string) => void;
 };
 
 const useStore = create<RFState>((set, get) => ({
@@ -58,44 +62,68 @@ const useStore = create<RFState>((set, get) => ({
     });
   },
   onConnect: (connection: Connection) => {
-
     set({ edges: handleConnect(connection, get()) });
+  },
+
+  clearFlow: () => {
+    set({ nodes: initialNodes });
+  },
+
+  addNode: (type: NodeType) => {
+    set({
+      nodes: addNode(get().nodes, type),
+    });
+  },
+
+  onFlowSave: () => {
+    const flow = get().nodes;
+    const edges = get().edges;
+    localStorage.setItem("nodes", JSON.stringify(flow));
+    localStorage.setItem("edges", JSON.stringify(edges));
+  },
+
+  onFlowLoad: () => {
+    const savedNodes = localStorage.getItem("nodes");
+    const savedEdges = localStorage.getItem("edges");
+    if (savedNodes && savedEdges) {
+      const parsedNodes = JSON.parse(savedNodes);
+      const parsedEdges = JSON.parse(savedEdges);
+
+      set({ nodes: parsedNodes, edges: parsedEdges });
+    }
   },
 
   updateNodeColor: (nodeId: string, color: string) => {
     set({
-      nodes: updateNodeColor(get().nodes, nodeId, color)
+      nodes: updateNodeColor(get().nodes, nodeId, color),
     });
   },
 
   updateNodeText: (nodeId: string, text: string) => {
     set({
-      nodes: updateNodeText(get().nodes, nodeId, text),
+      nodes: updateNodeText(get().nodes, get().edges, nodeId, text),
     });
-  },
-
-  addNode: (type: NodeType) => {
-    set((state) => ({
-      nodes: [...state.nodes, addNode(get().nodes, type)],
-    }));
   },
 
   mathOperation: (nodeId: string) => {
     set({
-      nodes: performMathOperation(get().nodes, nodeId)
+      nodes: performMathOperation(get().nodes, get().edges, nodeId),
     });
   },
 
   setMathOperationType: (type: string, id: string) => {
     set({
-      nodes: setOperationType(get().nodes, id, type)
-    })
+      nodes: setOperationType(get().nodes, id, type),
+    });
   },
 
   setNum: (nodeId: string, num: number) => {
-    set({ nodes: setNum(get().nodes, nodeId, num) })
+    set({ nodes: setNum(get().nodes, nodeId, num) });
   },
 
-}))
+  getUsers: async (nodeId: string) => {
+    set({ nodes: await getUsers(nodeId, get().nodes) });
+  },
+}));
 
 export default useStore;

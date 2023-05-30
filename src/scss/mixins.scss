@@ -1,0 +1,14 @@
+@import "./variables.scss";
+
+@mixin settings-btn{
+    background-color: $pannel-btn-bg;
+    padding: 10px;
+    border-radius: px;
+    font-family: $font-main;
+    font-weight: bold;
+    border: 0;
+    width: 100%;
+    border-bottom: 1px solid rgb(130, 158, 167);
+    height: 40px;
+
+}

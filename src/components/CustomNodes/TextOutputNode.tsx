@@ -5,7 +5,7 @@ export default function TextOutputNode({data }: NodeProps<TextGetter>) {
 
   return (
     <div style={{ backgroundColor: "red", borderRadius: 10 }}>
-      <div style={{ padding: 20 }}>
+      <div style={{ padding: 20, maxWidth: 200 }}>
         <div><p>Output</p></div>
       {data.text}
       </div>

@@ -4,10 +4,11 @@ import { shallow } from 'zustand/shallow';
 import useStore from '../store/store';
 import ColorChooserNode from "../components/CustomNodes/ColorChooserNode";
 import ColorReceiverNode from './CustomNodes/ColorReceiverNode';
-import ToUpperCaseNode from './CustomNodes/ToUpperCaseNode';
+import TextTransformerNode from './CustomNodes/TextTransformerNode';
 import TextOutputNode from './CustomNodes/TextOutputNode';
 import MathOperationNode from './CustomNodes/MathOperationNode';
 import NumberSetterNode from './CustomNodes/NumberSetterNode';
+import UserGetterNode from './CustomNodes/UserGetterNode';
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -20,10 +21,11 @@ const selector = (state: any) => ({
 const nodeTypes = {
   colorSetter: ColorChooserNode,
   colorGetter: ColorReceiverNode,
-  textSetter: ToUpperCaseNode,
+  textSetter: TextTransformerNode,
   textGetter: TextOutputNode,
   mathOperation: MathOperationNode,
-  numberSetter: NumberSetterNode
+  numberSetter: NumberSetterNode,
+  userGetter: UserGetterNode
 };
 
 function Flow() {
@@ -38,7 +40,7 @@ function Flow() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
-        fitView
+     
       ><Background></Background></ReactFlow>
     </div>
   );

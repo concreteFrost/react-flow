@@ -1,0 +1,9 @@
+@import '../../../scss/mixins.scss';
+
+.wrapper{
+    button{
+        @include settings-btn
+     
+       
+    }
+}

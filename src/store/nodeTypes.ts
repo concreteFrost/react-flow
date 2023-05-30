@@ -1,3 +1,4 @@
+import nodes from "./nodes"
 
 export interface NodeType {
   type: string,
@@ -33,11 +34,15 @@ export type NumberSetter = {
   number: number
 }
 
+export type UserGetter = {
+  users: []
+}
+
 
 export const nodeType = {
   colorGetter: {
     type: "colorGetter",
-    data: { color: "red", allowsMultipleConnection: false } as ColorGetter
+    data: { color: "red", allowsMultipleConnection: false} as ColorGetter,
   } as NodeType,
   colorSetter: {
     type: "colorSetter",
@@ -62,7 +67,10 @@ export const nodeType = {
   numberSetter: {
     type: "numberSetter",
     data: { number: 0 } as NumberSetter
+  } as NodeType,
+  userGetter:{
+    type: "userGetter",
+    data: {users:[]} as UserGetter
   } as NodeType
-
 }
 

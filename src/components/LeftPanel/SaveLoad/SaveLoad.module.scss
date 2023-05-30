@@ -1,0 +1,7 @@
+@import '../../../scss/mixins.scss';
+
+.container{
+    button{
+        @include settings-btn    
+    }
+}
